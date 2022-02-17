@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESAFIO DE PROGRAMAÇÃO - ACADEMIA CAPGEMINI</title>
+</head>
+<body>
+    <header>
+        <h3>DESAFIO DE PROGRAMAÇÃO - ACADEMIA CAPGEMINI</h3>
+        <h5>Candidato: Anderson Tiago Bonamim Costa</h5>
+    </header>
+    <hr>
+    <section class="questao1">
+        <div>
+            <h5>Questão 1</h5>
+            <p>Escreva um algoritmo que mostre na tela uma escada de tamanho n utilizando o caractere * e espaços. A base e altura da escada devem ser iguais ao valor de n. A última linha não deve conter nenhum espaço.</p>
+        </div>
+        <label for="q1">Digite um número</label>
+        <input type="number" id="q1">
+        <button id="env_q1">Enviar</button>
+
+        <div class="" id="resposta_q1">
+            <table id="" ></table>
+        </div>
+    </section>
+    <hr>
+    <section class="questao2">
+        <div>
+            <h5>Questão 2</h5>
+            <p>Débora se inscreveu em uma rede social para se manter em contato com seus amigos. A página de cadastro exigia o preenchimento dos campos de nome e senha, porém a senha precisa ser forte. O site considera uma senha forte quando ela satisfaz os seguintes critérios:</p>
+            <ul>
+                <li>Possui no mínimo 6 caracteres.</li>
+                <li>Contém no mínimo 1 digito.</li>
+                <li>Contém no mínimo 1 letra em minúsculo.</li>
+                <li>Contém no mínimo 1 letra em maiúsculo.</li>
+                <li>Contém no mínimo 1 caractere especial. Os caracteres especiais são: !@#$%^&*()-+</li>
+            </ul>
+        </div>
+
+        <label for="senha">Digite a senha</label>
+        <input type="password" id="password" placeholder="Digite a senha">
+        <button id="validaSenha">Enviar</button>
+        <div id="resultadoSenha"></div>
+    </section>
+    <hr>
+    <section class="questao3">
+        <div>
+            <h5>Questão 3</h5>
+            <p>Duas palavras podem ser consideradas anagramas de si mesmas se as letras de uma palavra podem ser realocadas para formar a outra palavra. Dada uma string qualquer, desenvolva um algoritmo que encontre o número de pares de substrings que são anagramas.
+            </p>
+        </div>
+
+        <label for="anagram">Digite a primeira palavra</label>
+        <input type="text" id="palavra_1">
+        <br>
+        <label for="anagram">Digite a segunda palavra</label>
+        <input type="text" id="palavra_2">
+        <br>
+        <button id="verificaAnagrama">Verificar</button>
+        <div id="R_anagrama">     
+        </div>
+    </section>
+
+    <script>
+
+        // Desafio 01
+        document.querySelector('#env_q1').addEventListener('click', function(){
+            let limite = document.querySelector('#q1').value;
+            let table = '';
+            let car = '&nbsp';
+
+            for(let i = 1; i <= limite; i++){
+                table += car.repeat(limite-i) + '*'.repeat(i) + '<br>'
+            }
+            document.querySelector('#resposta_q1').innerHTML = table
+        })
+
+        //  Validação senha
+        function senhaForte(p){
+            var retorno = false;
+            var letrasMaiusculas = /[A-Z]/;
+            var letrasMinusculas = /[a-z]/; 
+            var numeros = /[0-9]/;
+            var caracteresEspeciais = /[!|@|#|$|%|^|&|*|(|)|-|_]/;
+            
+            // Verifando comprimento da senha
+            if(p.length < 6){
+                return retorno;
+            }
+
+            var auxMaiuscula = 0;
+            var auxMinuscula = 0;
+            var auxNumero = 0;
+            var auxEspecial = 0;
+
+            for(var i=0; i<p.length; i++){
+                if(letrasMaiusculas.test(p[i]))
+                    auxMaiuscula++;
+                else if(letrasMinusculas.test(p[i]))
+                    auxMinuscula++;
+                else if(numeros.test(p[i]))
+                    auxNumero++;
+                else if(caracteresEspeciais.test(p[i]))
+                    auxEspecial++;
+            }
+            if (auxMaiuscula > 0){
+                if (auxMinuscula > 0){
+                    if (auxNumero > 0){
+                        if (auxEspecial) {
+                            retorno = true;
+                        }
+                    }
+                 }
+            }
+            return retorno;
+        }       
+
+        // Desafio 2
+        document.querySelector('#validaSenha').addEventListener('click', function() {
+            let senha = document.querySelector('#password').value
+            let resultado = senhaForte(senha)
+            if(resultado){
+                
+                document.querySelector('#resultadoSenha').innerHTML = "Senha segura!"
+            }else{
+                // verificando comprimento da senha digitada
+                if(senha.length < 6){
+                    let conta = 6 - senha.length
+                    document.querySelector('#resultadoSenha').innerHTML = `Senha não segura, faltam ${conta} caracteres`
+                }else{
+                    document.querySelector('#resultadoSenha').innerHTML = `Senha não segura! adicione variações de caracteres`
+                }
+            }            
+        })
+
+
+        // Desafio 3
+        function verificaAnagrama(p1, p2) {
+            let str = {}
+            if(p1.length !== p2.length) return false
+            for(let caractere of p1){
+                str[caractere] = (str[caractere] || 0) + 1
+            }    
+
+            for(let caractere of p2) {
+                if(!str[caractere]) return false
+                str[caractere] --
+            }
+
+            return true
+        }
+
+        document.querySelector('#verificaAnagrama').addEventListener('click', function(){
+            let p1 = document.querySelector('#palavra_1').value
+            let p2 = document.querySelector('#palavra_2').value
+
+            let resultado = verificaAnagrama(p1,p2)
+
+            if(resultado) {
+                document.getElementById('R_anagrama').innerHTML = "São anagramas!"
+            }else{
+                document.getElementById('R_anagrama').innerHTML = "Não são anagramas!"
+            }
+        })
+
+    </script>
+
+
+</body>
+</html>
